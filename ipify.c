@@ -92,3 +92,17 @@ int ipify_disconnect(int sd)
 	shutdown(sd, SHUT_RDWR);
 	return close(sd);
 }
+
+int ipify(char *addr, size_t len)
+{
+	int sd, ret;
+
+	sd = ipify_connect();
+	if (sd < 0)
+		return 1;
+
+	ret  = ipify_query(sd, addr, len);
+	ret |= ipify_disconnect(sd);
+
+	return ret;
+}

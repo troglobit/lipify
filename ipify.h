@@ -24,4 +24,6 @@ int ipify_connect    (void);
 int ipify_query      (int sd, char *addr, size_t len);
 int ipify_disconnect (int sd);
 
+int ipify            (char *addr, size_t len);
+
 #endif /* IPIFY_H_ */
