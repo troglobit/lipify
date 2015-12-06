@@ -1,10 +1,12 @@
-C lib for ipify.org
-===================
+C library for api.ipify.org
+===========================
 
 lipify connects to http://ipify.org to query your current IP address.
 
 Example
 -------
+
+Either get a descriptor, to `poll()` or whatever
 
 ```C
     #include <ipify.h>
@@ -25,3 +27,19 @@ Example
     }
 ```
 
+or simply
+
+```C
+    #include <ipify.h>
+    
+    int main(void)
+    {
+            char addr[256];
+    
+            if (ipify(addr, sizeof(addr)))
+                    return 1;
+
+            printf("%s\n", addr);
+            return 0;
+    }
+```
