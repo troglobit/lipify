@@ -16,6 +16,7 @@ ARFLAGS     = crus
 
 DISTFILES   = README.md LICENSE
 HEADERS     = ipify.h
+EXEC        = ipify
 OBJS        = ipify.o
 HDRS        = ipify.h
 JUNK        = *~ *.bak *.map .*.d *.so* *.a DEADJOE core core.*
@@ -25,10 +26,11 @@ LIBNAME     = libipify
 SOLIB       = $(LIBNAME).so.$(VER)
 SYMLIB      = $(LIBNAME).so
 STATICLIB   = $(LIBNAME).a
-TARGET      = $(STATICLIB) $(SOLIB)
+TARGET      = $(STATICLIB) $(SOLIB) $(EXEC)
 
 # Default install paths
 prefix     ?= /usr/local
+bindir     ?= $(prefix)/bin
 libdir     ?= $(prefix)/lib
 datadir    ?= $(prefix)/share/doc/$(LIBNAME)
 incdir     ?= $(prefix)/include
@@ -39,7 +41,7 @@ incdir     ?= $(prefix)/include
 
 all: $(TARGET)
 
-testit: testit.o $(STATICLIB)
+$(EXEC): testit.o $(STATICLIB)
 	@printf "  LINK    $(subst $(ROOTDIR)/,,$(shell pwd)/)$@\n"
 	@$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-Map,$@.map -o $@ $^ $(LDLIBS$(LDLIBS-$(@)))
 
@@ -51,11 +53,14 @@ $(STATICLIB): Makefile $(OBJS) $(HDRS)
 	@printf "  ARCHIVE $@\n"
 	@$(AR) $(ARFLAGS) $@ $(OBJS) 2>/dev/null
 
-install-exec:
+install-exec: $(SOLIB) $(EXEC)
 	@printf "  INSTALL $(DESTDIR)$(libdir)/$(SOLIB)\n"
 	@install -d $(DESTDIR)$(libdir)
 	@install $(SOLIB) $(DESTDIR)$(libdir)/$(SOLIB)
 	@ln -sf $(SOLIB) $(DESTDIR)$(libdir)/$(SYMLIB)
+	@printf "  INSTALL $(DESTDIR)$(bindir)/$(EXEC)\n"
+	@install -d $(DESTDIR)$(bindir)
+	@install $(EXEC) $(DESTDIR)$(bindir)/$(EXEC)
 
 install-dev:
 	@install -d $(DESTDIR)$(incdir)
@@ -86,7 +91,7 @@ uninstall:
 	-@$(RM) $(DESTDIR)$(libdir)/$(STATICLIB)
 
 clean:
-	-@$(RM) $(TARGET) *.o testit
+	-@$(RM) $(TARGET) *.o
 
 distclean: clean
 	-@$(RM) $(DEPS) $(JUNK)
