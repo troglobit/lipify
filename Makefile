@@ -3,8 +3,10 @@
 # Figure out root of library, unless used as submodule
 ROOTDIR    ?= $(shell pwd)
 
-VERSION    := 0.2-dev
+VERSION    := 0.2
 NAME       := lipify
+PKG        := $(NAME)-$(VERSION)
+ARCHIVE    := $(PKG).tar.xz
 
 CC         ?= $(CROSS)gcc
 AR         ?= $(CROSS)ar
@@ -95,3 +97,9 @@ clean:
 
 distclean: clean
 	-@$(RM) $(DEPS) $(JUNK)
+
+dist:
+	@echo "Building .xz tarball of $(PKG) in parent dir..."
+	git archive --format=tar --prefix=$(PKG)/ v$(VERSION) | xz >../$(ARCHIVE)
+	@(cd ..; md5sum $(ARCHIVE) | tee $(ARCHIVE).md5)
+
