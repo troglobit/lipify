@@ -15,6 +15,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <arpa/inet.h>
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
@@ -62,8 +63,8 @@ int ipify_connect(void)
 
 int ipify_query(int sd, char *addr, size_t len)
 {
-	int ret;
-	char buf[512], *ptr;
+	int domain, ret;
+	char buf[512], *ptr, tmp[sizeof(struct in6_addr)];
 	const char *req = HTTP_REQUEST;
 
 	ret = send(sd, req, strlen(req), 0);
@@ -82,7 +83,16 @@ int ipify_query(int sd, char *addr, size_t len)
 	if (!ptr)
 		return 1;
 	ptr += 4;
-	strncpy(addr, ptr, len);
+
+	domain = AF_INET;
+	if (!inet_pton(domain, ptr, tmp)) {
+		domain = AF_INET6;
+		if (!inet_pton(domain, ptr, tmp))
+			return 1;
+	}
+
+	if (!inet_ntop(domain, tmp, addr, len))
+		return 1;
 
 	return 0;
 }
