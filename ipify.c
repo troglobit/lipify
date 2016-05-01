@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
-#include <sys/types.h>
 #include <unistd.h>
 
 #define IPIFY_HOST    "api.ipify.org"
