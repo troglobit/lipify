@@ -2,11 +2,14 @@ C library for api.ipify.org
 ===========================
 
 lipify connects to http://ipify.org to query your current IP address.
+It supports both IPv4 and IPv6 addresses.
+
 
 Example
 -------
 
-Either get a descriptor, to `poll()` or whatever
+Either get a descriptor, to use with `poll()` or an event loop library,
+like [libuEv](https://github.com/troglobit/libuev)
 
 ```C
     #include <ipify.h>
@@ -43,3 +46,19 @@ or simply
             return 0;
     }
 ```
+
+
+License
+-------
+
+lipify is free software, licensed to you under the very permissive
+[ISC license](https://en.wikipedia.org/wiki/ISC_license).  See the
+file LICENSE in the lipify distribution for details.
+
+
+Origin & References
+-------------------
+
+lipify is written by [Joachim Nilsson](http://troglobit.com), post
+bug reports and pull requests to the project's GitHub repository at
+https://github.com/troglobit/lipify
