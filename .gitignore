@@ -1,0 +1,6 @@
+*~
+*.o
+*.map
+ipify
+libipify.a
+libipify.so*
