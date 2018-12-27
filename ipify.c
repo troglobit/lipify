@@ -29,33 +29,41 @@
 	"Host: " IPIFY_HOST "\r\n"		\
 	"User-Agent: " AGENT_NAME "\r\n\r\n";
 
-
+/*
+ * Connect to api.ipify.org using either address protocol supported.  We
+ * want to connect using TCP, so ask getaddrinfo() for a TCP connection
+ * over either IPv4 or IPv6, then use the first successful connection.
+ */
 int ipify_connect(void)
 {
-	int ret, sd;
-	struct addrinfo hints, *result;
-
-	sd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sd < 0)
-		return -1;
+	struct addrinfo *result, *rp;
+	struct addrinfo hints;
+	int rc, sd;
 
 	memset(&hints, 0, sizeof(struct addrinfo));
 	hints.ai_family   = AF_UNSPEC;
-	hints.ai_socktype = SOCK_DGRAM;
+	hints.ai_socktype = SOCK_STREAM;
 
-	ret = getaddrinfo(IPIFY_HOST, "http", &hints, &result);
-	if (ret || !result) {
-		close(sd);
+	rc = getaddrinfo(IPIFY_HOST, "http", &hints, &result);
+	if (rc || !result)
 		return -1;
+
+	for (rp = result; rp; rp = rp->ai_next) {
+		sd = socket(rp->ai_family, rp->ai_socktype, 0);
+		if (sd < 0)
+			continue;
+
+		rc = connect(sd, result->ai_addr, result->ai_addrlen);
+		if (rc) {
+			close(sd);
+			sd = -1;
+			continue;
+		}
+
+		break;
 	}
 
-	ret = connect(sd, result->ai_addr, result->ai_addrlen);
 	freeaddrinfo(result);
-
-	if (ret < 0) {
-		close(sd);
-		return -1;
-	}
 
 	return sd;
 }
