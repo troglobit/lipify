@@ -8,42 +8,45 @@ It supports both IPv4 and IPv6 addresses.
 Example
 -------
 
-Either get a descriptor, to use with `poll()` or an event loop library,
-like [libuEv](https://github.com/troglobit/libuev)
+The simplest example of lipify looks like this:
 
 ```C
+    #include <stdio.h>
     #include <ipify.h>
-    
-    int main(void)
-    {
-            int sd;
-            char addr[256];
-    
-            sd = ipify_connect();
-            if (sd < 0)
-                    return 1;
-    
-            if (!ipify_query(sd, addr, sizeof(addr)))
-                    printf("%s\n", addr);
-    
-            return ipify_disconnect(sd);
-    }
-```
 
-or simply
-
-```C
-    #include <ipify.h>
-    
     int main(void)
     {
             char addr[256];
-    
+
             if (ipify(addr, sizeof(addr)))
                     return 1;
 
             printf("%s\n", addr);
+
             return 0;
+    }
+```
+
+You can also get a descriptor, to use with `poll()` or an event loop library like
+[libuEv](https://github.com/troglobit/libuev), like this:
+
+
+```C
+    #include <ipify.h>
+
+    int main(void)
+    {
+            int sd;
+            char addr[256];
+
+            sd = ipify_connect();
+            if (sd < 0)
+                    return 1;
+
+            if (!ipify_query(sd, addr, sizeof(addr)))
+                    printf("%s\n", addr);
+
+            return ipify_disconnect(sd);
     }
 ```
 
