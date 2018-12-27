@@ -1,8 +1,10 @@
 C library for api.ipify.org
 ===========================
 
-lipify connects to http://ipify.org to query your current IP address.
+lipify connects to http://api.ipify.org to query your current IP address.
 It supports both IPv4 and IPv6 addresses.
+
+Download version tarball from https://github.com/troglobit/lipify/releases
 
 
 Example
