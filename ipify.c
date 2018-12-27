@@ -62,17 +62,20 @@ int ipify_connect(void)
 
 int ipify_query(int sd, char *addr, size_t len)
 {
-	int domain, ret;
-	char buf[512], *ptr, tmp[sizeof(struct in6_addr)];
 	const char *req = HTTP_REQUEST;
+	ssize_t rc;
+	char tmp[sizeof(struct in6_addr)];
+	char buf[512], *ptr;
+	int domain;
 
-	ret = send(sd, req, strlen(req), 0);
-	if (ret < 0)
-		return ret;
+	rc = send(sd, req, strlen(req), 0);
+	if (rc < 0)
+		return -1;
 
-	ret = recv(sd, buf, sizeof(buf), 0);
-	if (ret < 0)
-		return ret;
+	rc = recv(sd, buf, sizeof(buf), 0);
+	if (rc < 0)
+		return -1;
+	buf[rc] = 0;
 
 	ptr = strstr(buf, "200 OK");
 	if (!ptr)
