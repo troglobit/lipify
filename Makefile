@@ -3,7 +3,7 @@
 # Figure out root of library, unless used as submodule
 ROOTDIR    ?= $(shell pwd)
 
-VERSION    := 0.3
+VERSION    ?= 0.4
 NAME       := lipify
 PKG        := $(NAME)-$(VERSION)
 ARCHIVE    := $(PKG).tar.xz
