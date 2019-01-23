@@ -9,6 +9,25 @@ The library weighs in at 14 kiB.  A versioned tarball can be downloaded
 from GitHub: https://github.com/troglobit/lipify/releases
 
 
+Build & Install
+---------------
+
+By default, lipify installs to `/usr/local`:
+
+```
+make
+make install
+```
+
+The default can be changed by setting the `prefix=` variable at install:
+
+```
+make install prefix=/opt
+```
+
+> The `DESTDIR=` variable is also supported, for the benefit of packagers.
+
+
 Example
 -------
 
