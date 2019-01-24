@@ -53,7 +53,7 @@ int ipify_connect(void)
 		if (sd < 0)
 			continue;
 
-		rc = connect(sd, info->ai_addr, info->ai_addrlen);
+		rc = connect(sd, ai->ai_addr, ai->ai_addrlen);
 		if (rc) {
 			close(sd);
 			sd = -1;
