@@ -36,7 +36,7 @@
  */
 int ipify_connect(void)
 {
-	struct addrinfo *result, *rp;
+	struct addrinfo *info, *ai;
 	struct addrinfo hints;
 	int rc, sd;
 
@@ -44,16 +44,16 @@ int ipify_connect(void)
 	hints.ai_family   = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 
-	rc = getaddrinfo(IPIFY_HOST, "http", &hints, &result);
-	if (rc || !result)
+	rc = getaddrinfo(IPIFY_HOST, "http", &hints, &info);
+	if (rc || !info)
 		return -1;
 
-	for (rp = result; rp; rp = rp->ai_next) {
-		sd = socket(rp->ai_family, rp->ai_socktype, 0);
+	for (ai = info; ai; ai = ai->ai_next) {
+		sd = socket(ai->ai_family, ai->ai_socktype, 0);
 		if (sd < 0)
 			continue;
 
-		rc = connect(sd, result->ai_addr, result->ai_addrlen);
+		rc = connect(sd, info->ai_addr, info->ai_addrlen);
 		if (rc) {
 			close(sd);
 			sd = -1;
@@ -63,7 +63,7 @@ int ipify_connect(void)
 		break;
 	}
 
-	freeaddrinfo(result);
+	freeaddrinfo(info);
 
 	return sd;
 }
