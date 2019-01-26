@@ -30,18 +30,19 @@
 	"User-Agent: " AGENT_NAME "\r\n\r\n";
 
 /*
- * Connect to api.ipify.org using either address protocol supported.  We
- * want to connect using TCP, so ask getaddrinfo() for a TCP connection
- * over either IPv4 or IPv6, then use the first successful connection.
+ * Same as ipify_connect() but you can limit the call to the given
+ * address family.  Only AF_INET and IF_INET6 makes sense here, the
+ * default used by ipipfy_connect() is AF_UNSPEC with tries both IPv4
+ * and IPv6 in the order the name server provides them.
  */
-int ipify_connect(void)
+int ipify_connect1(int family)
 {
 	struct addrinfo *info, *ai;
 	struct addrinfo hints;
 	int rc, sd;
 
 	memset(&hints, 0, sizeof(struct addrinfo));
-	hints.ai_family   = AF_UNSPEC;
+	hints.ai_family   = family;
 	hints.ai_socktype = SOCK_STREAM;
 
 	rc = getaddrinfo(IPIFY_HOST, "http", &hints, &info);
@@ -66,6 +67,16 @@ int ipify_connect(void)
 	freeaddrinfo(info);
 
 	return sd;
+}
+
+/*
+ * Connect to api.ipify.org using either address protocol supported.  We
+ * want to connect using TCP, so ask getaddrinfo() for a TCP connection
+ * over either IPv4 or IPv6, then use the first successful connection.
+ */
+int ipify_connect(void)
+{
+	return ipify_connect1(AF_UNSPEC);
 }
 
 int ipify_query(int sd, char *addr, size_t len)

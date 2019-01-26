@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 int ipify_connect    (void);
+int ipify_connect1   (int family);
 int ipify_query      (int sd, char *addr, size_t len);
 int ipify_disconnect (int sd);
 
