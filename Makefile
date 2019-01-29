@@ -43,7 +43,7 @@ incdir     ?= $(prefix)/include
 
 all: $(TARGET)
 
-$(EXEC): testit.o $(STATICLIB)
+$(EXEC): main.o $(STATICLIB)
 	@printf "  LINK    $(subst $(ROOTDIR)/,,$(shell pwd)/)$@\n"
 	@$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-Map,$@.map -o $@ $^ $(LDLIBS$(LDLIBS-$(@)))
 
