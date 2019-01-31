@@ -1,3 +1,4 @@
+/* The contents of this file is in the public domain. */
 #include <ipify.h>
 
 int main(void)
