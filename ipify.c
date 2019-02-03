@@ -30,12 +30,10 @@
 	"User-Agent: " AGENT_NAME "\r\n\r\n";
 
 /*
- * Same as ipify_connect() but you can limit the call to the given
- * address family.  Only AF_INET and IF_INET6 makes sense here, the
- * default used by ipipfy_connect() is AF_UNSPEC with tries both IPv4
- * and IPv6 in the order the name server provides them.
+ * Same as ipify-connect1() but allows to also override the default host
+ * used for the IP address lookup.  Default: api.ipify.org
  */
-int ipify_connect1(int family)
+int ipify_connect2(const char *host, int family)
 {
 	struct addrinfo *info, *ai;
 	struct addrinfo hints;
@@ -45,7 +43,7 @@ int ipify_connect1(int family)
 	hints.ai_family   = family;
 	hints.ai_socktype = SOCK_STREAM;
 
-	rc = getaddrinfo(IPIFY_HOST, "http", &hints, &info);
+	rc = getaddrinfo(host, "http", &hints, &info);
 	if (rc || !info)
 		return -1;
 
@@ -67,6 +65,17 @@ int ipify_connect1(int family)
 	freeaddrinfo(info);
 
 	return sd;
+}
+
+/*
+ * Same as ipify_connect() but you can limit the call to the given
+ * address family.  Only AF_INET and IF_INET6 makes sense here, the
+ * default used by ipipfy_connect() is AF_UNSPEC with tries both IPv4
+ * and IPv6 in the order the name server provides them.
+ */
+int ipify_connect1(int family)
+{
+	return ipify_connect2(IPIFY_HOST, family);
 }
 
 /*
