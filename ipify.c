@@ -81,11 +81,11 @@ int ipify_connect(void)
 
 int ipify_query(int sd, char *addr, size_t len)
 {
-	const char *req = HTTP_REQUEST;
-	ssize_t rc;
 	char tmp[sizeof(struct in6_addr)];
+	const char *req = HTTP_REQUEST;
 	char buf[512], *ptr;
-	int domain;
+	ssize_t rc;
+	int family;
 
 	rc = send(sd, req, strlen(req), 0);
 	if (rc < 0)
@@ -105,14 +105,14 @@ int ipify_query(int sd, char *addr, size_t len)
 		return 1;
 	ptr += 4;
 
-	domain = AF_INET;
-	if (!inet_pton(domain, ptr, tmp)) {
-		domain = AF_INET6;
-		if (!inet_pton(domain, ptr, tmp))
+	family = AF_INET;
+	if (!inet_pton(family, ptr, tmp)) {
+		family = AF_INET6;
+		if (!inet_pton(family, ptr, tmp))
 			return 1;
 	}
 
-	if (!inet_ntop(domain, tmp, addr, len))
+	if (!inet_ntop(family, tmp, addr, len))
 		return 1;
 
 	return 0;
