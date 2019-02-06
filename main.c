@@ -7,11 +7,12 @@ int main(int argc, char *argv[])
 {
 	int family = AF_UNSPEC;
 	char addr[256];
+	char *host;
 	int i, sd;
 
 	for (i = 1; i < argc; i++) {
 		if (!strcmp(argv[i], "-h")) {
-			printf("ipify [-46h]\n");
+			printf("ipify [-46h] [HOST]\n");
 			return 0;
 		}
 		if (!strcmp(argv[i], "-4")) {
@@ -22,12 +23,16 @@ int main(int argc, char *argv[])
 			family = AF_INET6;
 			continue;
 		}
-		
-		printf("Invalid option: '%s'\n", argv[i]);
-		return 1;
+
+		break;
 	}
 
-	sd = ipify_connect1(family);
+	if (i < argc)
+		host = argv[i++];
+	else
+		host = "api.ipify.org";
+
+	sd = ipify_connect2(host, family);
 	if (sd < 0)
 		return 1;
 
