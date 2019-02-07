@@ -22,7 +22,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define IPIFY_HOST    "api.ipify.org"
+#include "ipify.h"
+
 #define AGENT_NAME    PACKAGE_NAME "/" PACKAGE_VERSION
 #define HTTP_REQUEST				\
 	"GET / HTTP/1.0\r\n"			\

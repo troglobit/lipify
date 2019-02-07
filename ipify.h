@@ -20,6 +20,8 @@
 
 #include <stddef.h>
 
+#define IPIFY_HOST   "api.ipify.org"
+
 int ipify_connect    (void);
 int ipify_connect1   (int family);
 int ipify_connect2   (const char *host, int family);
