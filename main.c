@@ -1,6 +1,7 @@
 /* The contents of this file is in the public domain. */
 #include <ipify.h>
 #include <string.h>
+#include <stdio.h>
 #include <sys/socket.h>
 
 int main(int argc, char *argv[])

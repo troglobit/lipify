@@ -18,7 +18,7 @@
 #ifndef IPIFY_H_
 #define IPIFY_H_
 
-#include <stdio.h>
+#include <stddef.h>
 
 int ipify_connect    (void);
 int ipify_connect1   (int family);
