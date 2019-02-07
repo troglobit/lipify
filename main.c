@@ -6,9 +6,9 @@
 
 int main(int argc, char *argv[])
 {
+	char *host = IPIFY_HOST;
 	int family = AF_UNSPEC;
 	char addr[256];
-	char *host;
 	int i, sd;
 
 	for (i = 1; i < argc; i++) {
@@ -30,8 +30,6 @@ int main(int argc, char *argv[])
 
 	if (i < argc)
 		host = argv[i++];
-	else
-		host = "api.ipify.org";
 
 	sd = ipify_connect2(host, family);
 	if (sd < 0)
