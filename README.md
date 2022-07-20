@@ -85,6 +85,6 @@ file LICENSE in the lipify distribution for details.
 Origin & References
 -------------------
 
-lipify is written by [Joachim Nilsson](http://troglobit.com), post
+lipify is written by [Joachim Wiberg](https://troglobit.com), post
 bug reports and pull requests to the project's GitHub repository at
 https://github.com/troglobit/lipify
